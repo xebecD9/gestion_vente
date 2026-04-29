@@ -1,14 +1,16 @@
-package main.java.com.gestionvente.ui;
+package Src.ui;
 
 import java.util.Scanner;
 
 public class Console {
     // Couleurs de ma console
+    public static final String ROUGE   = "\033[31m";
     public static final String SUCESS = "\033[42m";
     public static final String ERROR = "\033[41m";
     public static final String WARNING = "\033[43m";
     public static final String RESET = "\033[0m";
     public static final String TITLE = "\033[34m";
+    public static final String OPTION ="\033[35m";
     public static final String INFO = "\033[36m";
 
     public static Scanner scanner = new Scanner(System.in);
@@ -45,7 +47,9 @@ public class Console {
         System.out.println(TITLE + " ======================================================================" + RESET);
         System.out.println();
     }
-
+    public static void afficherOption(int numero,String texte){
+        System.out.println(OPTION +"["+ numero + "] " + RESET + texte);
+    }
     public static void afficherTableau(String[] entetes, String[][] lignes) {
         
         for (String entete : entetes) {
@@ -76,7 +80,9 @@ public class Console {
             }
         }
     }
-
+    public static void askinput(String label){
+        System.out.println(ROUGE + "n" + label + ":" + RESET);
+    }
     public static String lireTextePur(String message) {
         while (true) {
             String saisie = liresaisie(message);
@@ -87,5 +93,8 @@ public class Console {
                 printError("Erreur : veuillez n'utiliser que des lettres.");
             }
         }
+    }
+    public static void separateur(){
+        System.out.println( TITLE + "--------------------------------------------------" + RESET);
     }
 } 
