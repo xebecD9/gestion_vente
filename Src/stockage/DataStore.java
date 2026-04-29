@@ -1,4 +1,4 @@
-package java.com.gestionvente.stockage;
+package Src.stockage;
 
 public class DataStore {
     

@@ -1,4 +1,4 @@
-package java.com.gestionvente.services;
+package Src.services;
 
 public class ProduitService {
     

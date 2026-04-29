@@ -1,4 +1,4 @@
-package java.com.gestionvente.models;
+package Src.models;
 
 public class Vente {
     
