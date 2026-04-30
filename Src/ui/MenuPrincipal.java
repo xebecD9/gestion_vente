@@ -1,50 +1,87 @@
 package Src.ui;
 
-import java.util.Scanner;
 import Src.auth.*;
-public class MenuPrincipal {
-    private AuthService authService;
-    private Scanner scanner;
 
-    //constructeur
+import java.util.Scanner;
+
+
+public class MenuPrincipal {
+
+    private AuthService authService;
+    private Scanner     scanner;
+
     public MenuPrincipal() {
         this.authService = new AuthService();
-        this.scanner = new Scanner(System.in);
+        this.scanner     = new Scanner(System.in);
     }
-    public void demarrer(){
+
+    // ═══════════════════════════════════════════════════════════════
+    //  DÉMARRAGE
+    // ═══════════════════════════════════════════════════════════════
+
+    public void demarrer() {
+
+        // ── Bannière ─────────────────────────────────────────────
         Console.afficherBanniere();
-        Console.askinput("Identifiant");
+        Console.afficherAide("Veuillez vous identifier pour continuer.");
+        System.out.println();
+
+        // ── Saisie des identifiants ───────────────────────────────
+        Console.demanderSaisie("Identifiant");
         String identifiant = scanner.nextLine().trim();
-        Console.askinput("password");
-        String password = scanner.nextLine().trim();
+
+        Console.demanderMotDePasse("Mot de passe");
+        String motDePasse = scanner.nextLine().trim();
+
+        System.out.println();
+
+        // ── Animation de vérification ─────────────────────────────
+        Console.afficherChargement("Vérification des accès…", 600);
+
         Console.separateur();
 
-        Utilisateur u = authService.login(identifiant, password);
+        // ── Authentification ──────────────────────────────────────
+        Utilisateur u = authService.login(identifiant, motDePasse);
 
-        if(u ==null){
-            Console.printError("Connexion impossible");
+        if (u == null) {
+            System.out.println();
+            Console.afficherErreur("Identifiants incorrects. Accès refusé.");
+            Console.afficherAide("Contactez l'administrateur si le problème persiste.");
+            Console.separateur();
             scanner.close();
             return;
         }
-        Console.printSuccess("Bienvenue" + u.getName() + "!");
-        Console.printInfo("Role" + u.getRole());
-        Console.separateur();
 
+        // ── Accueil personnalisé ──────────────────────────────────
+        System.out.println();
+        Console.afficherSucces("Bienvenue, " + Console.BLANC + Console.GRAS + u.getNom() + Console.RESET + Console.VERT + " !");
+        Console.afficherBadgeRole(u.getRole());
+        Console.separateurEpais();
 
-        if(u.getRole().equals("admin")){
-            MenuAdmin.afficherMenu();
-        }
-        else if(u.getRole().equals("vendeur")){
-            MenuVendeur.afficherMenu();
+        // ── Routage selon le rôle ─────────────────────────────────
+        String role = u.getRole().toUpperCase();
 
+        switch (role) {
+            case "ADMIN":
+                new MenuAdmin(u, scanner, authService).afficher();
+                break;
+            case "VENDEUR":
+                new MenuVendeur(u, scanner).afficher();
+                break;
+            default:
+                Console.afficherErreur("Rôle non reconnu : « " + u.getRole() + " ».");
+                Console.afficherAide("Veuillez contacter le support technique.");
+                break;
         }
-        else{
-            Console.printError("Role " + u.getRole() + "non reconnu");
-        }
+
+        // ── Déconnexion ───────────────────────────────────────────
         authService.logout();
+        System.out.println();
+        Console.separateurEpais();
+        Console.afficherInfo("Session terminée · À bientôt, " + u.getNom() + " !");
         Console.separateur();
-        Console.printInfo("Deconnexion effectuee");
+        System.out.println();
+
         scanner.close();
     }
-    
 }

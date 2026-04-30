@@ -1,47 +1,34 @@
 package Src.auth;
 
-public abstract class Utilisateur  {
-    private int id;
+public abstract class Utilisateur {
+
+    private int    id;
     private String identifiant;
-    private String password;
-    private String name;
-    private String role;   
+    private String motDePasse;
+    private String nom;
+    private String role;
 
+    public Utilisateur(int id, String identifiant,
+                       String motDePasse, String nom, String role) {
+        this.id          = id;
+        this.identifiant = identifiant;
+        this.motDePasse  = motDePasse;
+        this.nom         = nom;
+        this.role        = role;
+    }
 
-    public  Utilisateur(int id,String identifiant,String password,String name,String role){
-        this.id=id;
-        this.identifiant=identifiant;
-        this.password=password;
-        this.name=name;
-        this.role=role;
-    }
-    //getters
-    public int getId(){
-        return id;
-    }
-    public String getIdentifiant(){
-        return identifiant;
-    }
-    public String getPassword(){
-        return password;
+    public int    getId()          { return id; }
+    public String getIdentifiant() { return identifiant; }
+    public String getMotDePasse()  { return motDePasse; }
+    public String getNom()         { return nom; }
+    public String getRole()        { return role; }
 
-    }
-    public String getName(){
-        return name;
-    }
-    public String getRole(){
-        return role;
-    }   
-    //setters
-    public void setName(String name){
-        this.name=name;
-    }
-    public void setPassword(String password){
-        this.password=password;
-    }
-    //aide pour la sauvegarde dans le fichier
+    public void setNom(String nom)               { this.nom = nom; }
+    public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
+    public void setIdentifiant(String identifiant) { this.identifiant = identifiant; }
+
     @Override
-    public String toString(){
-        return id + "|" + identifiant + "|" + password + "|" + name + "|" + password;
+    public String toString() {
+        return id + "|" + identifiant + "|" + motDePasse + "|" + nom + "|" + role;
     }
 }

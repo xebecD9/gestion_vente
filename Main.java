@@ -1,12 +1,9 @@
 
 
-import Src.auth.AuthService;
+import Src.ui.MenuPrincipal;
 
 public class Main {
     public static void main(String[] args) {
-       System.out.println(AuthService.hasher("admin"));
-       System.out.println(AuthService.hasher("1234"));
-             
+        new MenuPrincipal().demarrer();
     }
-
 }

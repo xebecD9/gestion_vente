@@ -1,100 +1,244 @@
 package Src.ui;
 
-import java.util.Scanner;
-
+/**
+ * ╔══════════════════════════════════════════════╗
+ *  Console  —  Utilitaires d'affichage ANSI
+ *  Système de Gestion des Ventes · D.I.K.W
+ * ╚══════════════════════════════════════════════╝
+ */
 public class Console {
-    // Couleurs de ma console
-    public static final String ROUGE   = "\033[31m";
-    public static final String SUCESS = "\033[42m";
-    public static final String ERROR = "\033[41m";
-    public static final String WARNING = "\033[43m";
-    public static final String RESET = "\033[0m";
-    public static final String TITLE = "\033[34m";
-    public static final String OPTION ="\033[35m";
-    public static final String INFO = "\033[36m";
 
-    public static Scanner scanner = new Scanner(System.in);
+    // ── Réinitialisation ─────────────────────────────────────────
+    public static final String RESET  = "\033[0m";
 
-    // Méthodes d'affichage simple 
-    public static void printSuccess(String message) {
-        System.out.println(SUCESS + message + RESET);
-    }
+    // ── Styles ────────────────────────────────────────────────────
+    public static final String GRAS        = "\033[1m";
+    public static final String ITALIQUE    = "\033[3m";
+    public static final String SOULIGNE    = "\033[4m";
+    public static final String INVERSE     = "\033[7m";
+    public static final String ESTOMPE     = "\033[2m";
 
-    public static void printError(String message) {
-        System.out.println(ERROR + message + RESET);
-    }
+    // ── Couleurs texte ────────────────────────────────────────────
+    public static final String ROUGE    = "\033[91m";   // rouge vif
+    public static final String VERT     = "\033[92m";   // vert vif
+    public static final String JAUNE    = "\033[93m";   // jaune vif
+    public static final String BLEU     = "\033[94m";   // bleu vif
+    public static final String MAGENTA  = "\033[95m";   // magenta vif
+    public static final String CYAN     = "\033[96m";   // cyan vif
+    public static final String BLANC    = "\033[97m";   // blanc pur
+    public static final String GRIS     = "\033[90m";   // gris sombre
 
-    public static void printWarning(String message) {
-        System.out.println(WARNING + message + RESET);
-    }
+    // ── Couleurs sombres ──────────────────────────────────────────
+    public static final String ROUGE_S   = "\033[31m";
+    public static final String VERT_S    = "\033[32m";
+    public static final String JAUNE_S   = "\033[33m";
+    public static final String BLEU_S    = "\033[34m";
+    public static final String MAGENTA_S = "\033[35m";
+    public static final String CYAN_S    = "\033[36m";
 
-    public static void printTitle(String message) {
-        System.out.println(TITLE + message + RESET);
-    }
+    // ── Arrière-plans ─────────────────────────────────────────────
+    public static final String BG_ROUGE   = "\033[41m";
+    public static final String BG_VERT    = "\033[42m";
+    public static final String BG_JAUNE   = "\033[43m";
+    public static final String BG_BLEU    = "\033[44m";
+    public static final String BG_MAGENTA = "\033[45m";
+    public static final String BG_CYAN    = "\033[46m";
+    public static final String BG_GRIS    = "\033[100m";
 
-    public static void printInfo(String message) {
-        System.out.println(INFO + message + RESET);
-    }
+  
+    private static final int LARGEUR = 50;
 
-    public static void effacerecran() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
+   
     public static void afficherBanniere() {
-        System.out.println(TITLE + " ======================================================================" + RESET);
-        System.out.println(TITLE + "   BIENVENUE DANS LE GESTIONNAIRE VENTE DE D.I.K.W" + RESET);
-        System.out.println(TITLE + " ======================================================================" + RESET);
+        String bord  = CYAN + GRAS;
+        String texte = BLANC + GRAS;
+        String sous  = GRIS + ITALIQUE;
+
+        System.out.println();
+        System.out.println(bord + "  ╔══════════════════════                      ════════════════════════╗" + RESET);
+        System.out.println(bord + "  ║" + texte + "             SYSTÈME DE GESTION DES VENTES " + bord + "║" + RESET);
+        System.out.println(bord + "  ║" + sous  + "                        D . I . K . W      " + bord + "║" + RESET);
+        System.out.println(bord + "  ║" + GRIS  + "         votre satisfaction,notre priorite " + bord + "║" + RESET);
+        System.out.println(bord + "  ╚══════════════════════                      ════════════════════════╝" + RESET);
         System.out.println();
     }
-    public static void afficherOption(int numero,String texte){
-        System.out.println(OPTION +"["+ numero + "] " + RESET + texte);
-    }
-    public static void afficherTableau(String[] entetes, String[][] lignes) {
-        
-        for (String entete : entetes) {
-            System.out.print(String.format("%-20s", entete));
-        }
-        System.out.println("\n" + "-".repeat(entetes.length * 20));
 
-        // Affichage des données
-        for (String[] ligne : lignes) {
-            for (String cellule : ligne) {
-                System.out.print(String.format("%-20s", cellule));
-            }
-            System.out.println();
-        }
+   
+    public static void afficherTitre(String titre) {
+        System.out.println();
+        String ligne = construireLigneTitre(titre.toUpperCase(), '─');
+        System.out.println(CYAN + GRAS + ligne + RESET);
     }
 
-    public static String liresaisie(String message) {
-        System.out.print(message + " : ");
-        return scanner.nextLine();
+   
+    public static void afficherSousTitre(String titre) {
+        System.out.println();
+        System.out.println(BLEU + GRAS + "  ▸ " + titre + RESET);
+        System.out.println(BLEU + ESTOMPE + "  " + "─".repeat(LARGEUR - 2) + RESET);
     }
 
-    public static int lireEntier(String message) {
-        while (true) {
-            try {
-                return Integer.parseInt(liresaisie(message));
-            } catch (NumberFormatException e) {
-                printError("Erreur : veuillez saisir un nombre entier valide.");
-            }
+
+    public static void separateur() {
+        System.out.println(GRIS + "  " + "─".repeat(LARGEUR - 2) + RESET);
+    }
+
+   
+    public static void separateurEpais() {
+        System.out.println(BLEU + GRAS + "  " + "═".repeat(LARGEUR - 2) + RESET);
+    }
+
+    /** Message de succès (vert). */
+    public static void afficherSucces(String msg) {
+        System.out.println(VERT + GRAS + "  ✔ " + RESET + VERT + msg + RESET);
+    }
+
+    /** Message d'erreur (rouge). */
+    public static void afficherErreur(String msg) {
+        System.out.println(ROUGE + GRAS + "  ✘ " + RESET + ROUGE + msg + RESET);
+    }
+
+    /** Message d'information (jaune). */
+    public static void afficherInfo(String msg) {
+        System.out.println(JAUNE + "  ℹ  " + RESET + ESTOMPE + msg + RESET);
+    }
+
+    /** Message d'avertissement (magenta). */
+    public static void afficherAvertissement(String msg) {
+        System.out.println(MAGENTA + GRAS + "  ⚠ " + RESET + MAGENTA + msg + RESET);
+    }
+
+    /** Texte neutre estompé (aide contextuelle, conseils). */
+    public static void afficherAide(String msg) {
+        System.out.println(GRIS + ITALIQUE + "    " + msg + RESET);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  OPTIONS DE MENU
+    // ═══════════════════════════════════════════════════════════════
+
+    /**
+     * Affiche une option numérotée.
+     * @param numero  numéro de l'option (0 = action de sortie)
+     * @param icone   icône Unicode (ex : "📦", "👤", "📊")
+     * @param texte   libellé de l'option
+     */
+    public static void afficherOption(int numero, String icone, String texte) {
+        if (numero == 0) {
+            // Option de sortie : style discret
+            System.out.println(GRIS + "  [" + numero + "] " + RESET + ESTOMPE + icone + " " + texte + RESET);
+        } else {
+            System.out.println(JAUNE + GRAS + "  [" + numero + "] " + RESET + BLANC + icone + " " + texte + RESET);
         }
     }
-    public static void askinput(String label){
-        System.out.println(ROUGE + "n" + label + ":" + RESET);
+
+    /**
+     * Surcharge sans icône (rétrocompatibilité).
+     */
+    public static void afficherOption(int numero, String texte) {
+        afficherOption(numero, "•", texte);
     }
-    public static String lireTextePur(String message) {
-        while (true) {
-            String saisie = liresaisie(message);
-            // Vérifie si la saisie contient au moins une lettre et aucun chiffre
-            if (saisie.matches("^[a-zA-ZÀ-ÿ\\s-]+$") && !saisie.trim().isEmpty()) {
-                return saisie;
-            } else {
-                printError("Erreur : veuillez n'utiliser que des lettres.");
-            }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  SAISIE
+    // ═══════════════════════════════════════════════════════════════
+
+    /** Invite de saisie standard. */
+    public static void demanderSaisie(String label) {
+        System.out.print(CYAN + "  ▶ " + label + " : " + RESET);
+    }
+
+    /** Invite de saisie pour mot de passe (masqué visuellement). */
+    public static void demanderMotDePasse(String label) {
+        System.out.print(MAGENTA + "  🔒 " + label + " : " + RESET);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  BADGES DE RÔLE
+    // ═══════════════════════════════════════════════════════════════
+
+    /**
+     * Affiche un badge coloré selon le rôle (ADMIN / VENDEUR / …).
+     */
+    public static void afficherBadgeRole(String role) {
+        String badge;
+        switch (role.toUpperCase()) {
+            case "ADMIN":
+                badge = BG_ROUGE + BLANC + GRAS + " ⚙ ADMINISTRATEUR " + RESET;
+                break;
+            case "VENDEUR":
+                badge = BG_BLEU + BLANC + GRAS + " 🛒 VENDEUR " + RESET;
+                break;
+            default:
+                badge = BG_GRIS + BLANC + GRAS + " ? " + role.toUpperCase() + " " + RESET;
         }
+        System.out.println("  " + badge);
     }
-    public static void separateur(){
-        System.out.println( TITLE + "--------------------------------------------------" + RESET);
+
+    // ═══════════════════════════════════════════════════════════════
+    //  TABLEAUX & DONNÉES
+    // ═══════════════════════════════════════════════════════════════
+
+    /**
+     * Affiche une ligne de tableau formatée.
+     * Exemple : afficherLigneTableau("ID", "12") → │ ID            │ 12           │
+     */
+    public static void afficherLigneTableau(String cle, String valeur) {
+        String k = pad(cle,   16);
+        String v = pad(valeur, 26);
+        System.out.println(GRIS + "  │ " + RESET + BLANC + k + GRIS + " │ " + RESET + ESTOMPE + v + GRIS + " │" + RESET);
     }
-} 
+
+    /** En-tête de tableau. */
+    public static void afficherEnTeteTableau(String col1, String col2) {
+        String k = pad(col1.toUpperCase(), 16);
+        String v = pad(col2.toUpperCase(), 26);
+        System.out.println(BLEU + GRAS + "  ┌──────────────────┬────────────────────────────┐" + RESET);
+        System.out.println(BLEU + GRAS + "  │ " + RESET + CYAN + GRAS + k + BLEU + GRAS + " │ " + RESET + CYAN + GRAS + v + BLEU + GRAS + " │" + RESET);
+        System.out.println(BLEU + GRAS + "  ├──────────────────┼────────────────────────────┤" + RESET);
+    }
+
+    /** Pied de tableau. */
+    public static void afficherPiedTableau() {
+        System.out.println(BLEU + GRAS + "  └──────────────────┴────────────────────────────┘" + RESET);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  CHARGEMENT
+    // ═══════════════════════════════════════════════════════════════
+
+    /**
+     * Affiche une animation de chargement simple (bloquante, démo visuelle).
+     * @param message texte affiché pendant le chargement
+     * @param ms      durée totale en millisecondes
+     */
+    public static void afficherChargement(String message, int ms) {
+        String[] frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
+        int steps = Math.max(1, ms / 80);
+        try {
+            for (int i = 0; i < steps; i++) {
+                System.out.print("\r" + CYAN + "  " + frames[i % frames.length] + "  " + message + " " + RESET);
+                Thread.sleep(80);
+            }
+        } catch (InterruptedException ignored) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println("\r" + VERT + "  ✔  " + message + RESET + "          ");
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  UTILITAIRES INTERNES
+    // ═══════════════════════════════════════════════════════════════
+
+    private static String construireLigneTitre(String titre, char remplissage) {
+        int espaceTotal = LARGEUR - titre.length() - 4; // 4 = "  " + " " + " "
+        int gauche = Math.max(1, espaceTotal / 2);
+        int droite = Math.max(1, espaceTotal - gauche);
+        return "  " + String.valueOf(remplissage).repeat(gauche) + " " + titre + " " + String.valueOf(remplissage).repeat(droite);
+    }
+
+    private static String pad(String s, int largeur) {
+        if (s == null) s = "";
+        if (s.length() >= largeur) return s.substring(0, largeur);
+        return s + " ".repeat(largeur - s.length());
+    }
+}

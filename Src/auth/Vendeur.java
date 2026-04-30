@@ -1,19 +1,14 @@
 package Src.auth;
 
 public class Vendeur extends Utilisateur {
-    double totalVentes;
 
-    public Vendeur(int id, String identifiant, String password, String name) {
-        super(id, identifiant, password, name, "Vendeur");
-        this.totalVentes = 0.0;
-        
+    private double chiffreAffaires;
+
+    public Vendeur(int id, String identifiant, String motDePasse, String nom) {
+        super(id, identifiant, motDePasse, nom, "VENDEUR");
+        this.chiffreAffaires = 0.0;
     }
-    public double getTotalVentes() {
-        return totalVentes;
-    }
-    public void ajouterVente(double montant) {
-        if (montant > 0) {
-        this.totalVentes += montant;
-    }
-}
+
+    public double getChiffreAffaires()      { return chiffreAffaires; }
+    public void ajouterVente(double montant) { this.chiffreAffaires += montant; }
 }
