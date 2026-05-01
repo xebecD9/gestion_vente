@@ -1,0 +1,5 @@
+2026-04-28;Paul;Stylo;2;500
+2026-04-28;Marie;Cahier;1;1000
+2026-04-27;Paul;Stylo;3;500
+2026-04-29;Claire;Stylo;6;500
+2026-04-29;Nathan;Livre;4;5500
