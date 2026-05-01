@@ -21,3 +21,4 @@ public class MenuVendeur {
         } while (choix != 0);
     }
 }
+// test
