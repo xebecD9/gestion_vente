@@ -1,4 +1,6 @@
-1|admin1|21232f297a57a5a743894a0e4a801fc3|Admin Principal|ADMIN
-2|vendeur1|482c811da5d5b4bc6d497ffa98491e38|Jean Dupont|VENDEUR
-3|vendeur2|5f4dcc3b5aa765d61d8327deb882cf99|Marie Curie|VENDEUR
-4|vendeur3|password2|saadio fongang|VENDEUR
+# Fichier des utilisateurs
+# Format : id;identifiant;motDePasse(hash);nom;role
+1;admin;21232f297a57a5a743894a0e4a801fc3;Administrateur Système;ADMIN
+2;vendeur1;5f4dcc3b5aa765d61d8327deb882cf99;Essame joseph;VENDEUR
+3;vendeur2;5f4dcc3b5aa765d61d8327deb882cf99;Eyenga claire;VENDEUR
+4;vendeur3;5f4dcc3b5aa765d61d8327deb882cf99;Fotso kaje;VENDEUR

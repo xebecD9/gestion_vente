@@ -19,48 +19,48 @@ public class ClientService {
         this.scanner = scanner;
     }
 
-    // ── Ajouter ──────────────────────────────────────────────────
+    /** Ajouter une compagnie cliente. */
     public void ajouterClient() {
-        Console.afficherTitre("Ajouter un client");
+        Console.afficherTitre("Ajouter une compagnie cliente");
 
-        Console.demanderSaisie("Nom");
+        Console.demanderSaisie("Nom de la compagnie");
         String nom = scanner.nextLine().trim();
 
-        Console.demanderSaisie("Téléphone");
+        Console.demanderSaisie("Contact Principal (Téléphone)");
         String tel = scanner.nextLine().trim();
 
         Console.demanderSaisie("Email");
         String email = scanner.nextLine().trim();
 
-        Console.demanderSaisie("Adresse");
+        Console.demanderSaisie("Adresse du siège");
         String adresse = scanner.nextLine().trim();
 
         int id = store.prochainIdClient();
         Client c = new Client(id, nom, tel, email, adresse);
         store.ajouterClient(c);
-        Console.afficherSucces("Client ajouté avec l'ID : " + id);
+        Console.afficherSucces("Compagnie ajoutée avec l'ID : " + id);
     }
 
-    // ── Modifier ─────────────────────────────────────────────────
+    /** Modifier une compagnie. */
     public void modifierClient() {
-        Console.afficherTitre("Modifier un client");
+        Console.afficherTitre("Modifier une compagnie");
         afficherTousClients();
 
-        Console.demanderSaisie("ID du client à modifier");
+        Console.demanderSaisie("ID de la compagnie à modifier");
         int id;
         try { id = Integer.parseInt(scanner.nextLine().trim()); }
         catch (NumberFormatException e) { Console.afficherErreur("ID invalide."); return; }
 
         Client c = store.trouverClient(id);
-        if (c == null) { Console.afficherErreur("Client introuvable."); return; }
+        if (c == null) { Console.afficherErreur("Compagnie introuvable."); return; }
 
-        Console.demanderSaisie("Nouveau nom [" + c.getNom() + "]");
+        Console.demanderSaisie("Nouveau nom [" + c.getNomCompagnie() + "]");
         String nom = scanner.nextLine().trim();
-        if (!nom.isEmpty()) c.setNom(nom);
+        if (!nom.isEmpty()) c.setNomCompagnie(nom);
 
-        Console.demanderSaisie("Nouveau téléphone [" + c.getTelephone() + "]");
+        Console.demanderSaisie("Nouveau contact [" + c.getContactPrincipal() + "]");
         String tel = scanner.nextLine().trim();
-        if (!tel.isEmpty()) c.setTelephone(tel);
+        if (!tel.isEmpty()) c.setContactPrincipal(tel);
 
         Console.demanderSaisie("Nouvel email [" + c.getEmail() + "]");
         String email = scanner.nextLine().trim();
@@ -71,80 +71,89 @@ public class ClientService {
         if (!adresse.isEmpty()) c.setAdresse(adresse);
 
         store.sauvegarderClients();
-        Console.afficherSucces("Client modifié.");
+        Console.afficherSucces("Compagnie modifiée.");
     }
 
-    // ── Supprimer ────────────────────────────────────────────────
+    /** Supprimer une compagnie. */
     public void supprimerClient() {
-        Console.afficherTitre("Supprimer un client");
+        Console.afficherTitre("Supprimer une compagnie");
         afficherTousClients();
 
-        Console.demanderSaisie("ID du client à supprimer");
+        Console.demanderSaisie("ID de la compagnie à supprimer");
         int id;
         try { id = Integer.parseInt(scanner.nextLine().trim()); }
         catch (NumberFormatException e) { Console.afficherErreur("ID invalide."); return; }
 
         if (store.trouverClient(id) == null) {
-            Console.afficherErreur("Client introuvable."); return;
+            Console.afficherErreur("Compagnie introuvable."); return;
         }
         store.supprimerClient(id);
-        Console.afficherSucces("Client supprimé.");
+        Console.afficherSucces("Compagnie supprimée.");
     }
 
-    // ── Afficher tous ────────────────────────────────────────────
+    /** Afficher toutes les compagnies. */
     public void afficherTousClients() {
-        Console.afficherTitre("Liste des clients");
+        Console.nettoyerEcran();
+        Console.afficherTitre("Liste des compagnies");
         List<Client> liste = store.getClients();
-        if (liste.isEmpty()) { Console.afficherInfo("Aucun client enregistré."); return; }
+        if (liste.isEmpty()) { Console.afficherInfo("Aucune compagnie enregistrée."); return; }
 
-        System.out.println(Console.GRAS
-            + String.format("%-5s %-20s %-15s %-25s %-20s", "ID", "Nom", "Téléphone", "Email", "Adresse")
-            + Console.RESET);
-        Console.separateur();
+        System.out.println(Console.MAGENTA + "  +" + "-".repeat(90) + "+" + Console.RESET);
+        System.out.println(Console.MAGENTA + "  | " + Console.CYAN + Console.GRAS
+            + String.format("%-4s | %-20s | %-15s | %-20s | %-20s", "ID", "Compagnie", "Contact", "Email", "Adresse")
+            + Console.MAGENTA + " |" + Console.RESET);
+        System.out.println(Console.MAGENTA + "  +" + "-".repeat(90) + "+" + Console.RESET);
 
         for (Client c : liste) {
-            System.out.printf("%-5d %-20s %-15s %-25s %-20s%n",
-                c.getId(), c.getNom(), c.getTelephone(), c.getEmail(), c.getAdresse());
+            System.out.printf(Console.MAGENTA + "  | " + Console.RESET + "%-4d " + Console.MAGENTA + "|" + Console.RESET + " %-20s " + Console.MAGENTA + "|" + Console.RESET + " %-15s " + Console.MAGENTA + "|" + Console.RESET + " %-20s " + Console.MAGENTA + "|" + Console.RESET + " %-20s " + Console.MAGENTA + "|%n" + Console.RESET,
+                c.getId(), 
+                c.getNomCompagnie().length() > 20 ? c.getNomCompagnie().substring(0, 17) + "..." : c.getNomCompagnie(), 
+                c.getContactPrincipal(), 
+                c.getEmail().length() > 20 ? c.getEmail().substring(0, 17) + "..." : c.getEmail(), 
+                c.getAdresse().length() > 20 ? c.getAdresse().substring(0, 17) + "..." : c.getAdresse());
         }
-        Console.separateur();
+        System.out.println(Console.MAGENTA + "  +" + "-".repeat(90) + "+" + Console.RESET);
+        System.out.println();
     }
 
-    // ── Rechercher ───────────────────────────────────────────────
+    /** Rechercher une compagnie. */
     public void rechercherClient() {
-        Console.afficherTitre("Rechercher un client");
+        Console.afficherTitre("Rechercher une compagnie");
         Console.demanderSaisie("Nom ou ID");
         String terme = scanner.nextLine().trim();
 
         List<Client> resultats = new ArrayList<>();
         for (Client c : store.getClients()) {
-            if (c.getNom().toLowerCase().contains(terme.toLowerCase())
+            if (c.getNomCompagnie().toLowerCase().contains(terme.toLowerCase())
                     || String.valueOf(c.getId()).equals(terme)) {
                 resultats.add(c);
             }
         }
 
         if (resultats.isEmpty()) {
-            Console.afficherInfo("Aucun client trouvé.");
+            Console.afficherInfo("Aucune compagnie trouvée.");
         } else {
             for (Client c : resultats) {
                 System.out.printf("[%d] %s — %s — %s%n",
-                    c.getId(), c.getNom(), c.getTelephone(), c.getEmail());
+                    c.getId(), c.getNomCompagnie(), c.getContactPrincipal(), c.getEmail());
             }
         }
     }
-
-    // ── Historique achats ────────────────────────────────────────
+ 
+    /** Historique achats. */
     public void afficherHistoriqueClient() {
-        Console.afficherTitre("Historique d'un client");
-        Console.demanderSaisie("ID du client");
+        Console.afficherTitre("Historique d'une compagnie");
+        Console.demanderSaisie("ID de la compagnie");
         int id;
+        //on essaye de convertir l'entree en entier     
         try { id = Integer.parseInt(scanner.nextLine().trim()); }
+        //si la conversion echoue, on affiche une erreur
         catch (NumberFormatException e) { Console.afficherErreur("ID invalide."); return; }
-
+        //on cherche le client par son id
         Client c = store.trouverClient(id);
-        if (c == null) { Console.afficherErreur("Client introuvable."); return; }
+        if (c == null) { Console.afficherErreur("Compagnie introuvable."); return; }
 
-        Console.afficherInfo("Historique de : " + c.getNom());
+        Console.afficherInfo("Historique de : " + c.getNomCompagnie());
         Console.separateur();
 
         boolean trouve = false;
@@ -155,6 +164,6 @@ public class ClientService {
                 trouve = true;
             }
         }
-        if (!trouve) Console.afficherInfo("Aucun achat pour ce client.");
+        if (!trouve) Console.afficherInfo("Aucun achat pour cette compagnie.");
     }
 }

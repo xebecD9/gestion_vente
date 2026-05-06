@@ -20,6 +20,7 @@ public class MenuPrincipal {
     // ═══════════════════════════════════════════════════════════════
 
     public void demarrer() {
+        Console.nettoyerEcran();
 
         // ── Bannière ─────────────────────────────────────────────
         Console.afficherBanniere();

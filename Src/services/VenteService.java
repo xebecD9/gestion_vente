@@ -1,6 +1,5 @@
 package Src.services;
 
-
 import Src.modeles.*;
 import Src.auth.*;  
 import Src.stockage.DataStore;
@@ -20,26 +19,24 @@ public class VenteService {
         this.utilisateurConnecte = utilisateur;
     }
 
-    // ── Créer une vente ──────────────────────────────────────────
+    /** Créer une vente. */
     public void creerVente() {
         Console.afficherTitre("Nouvelle vente");
 
-        // Sélection client
-        Console.demanderSaisie("ID du client");
+        Console.demanderSaisie("ID de la compagnie cliente");
         int clientId;
         try { clientId = Integer.parseInt(scanner.nextLine().trim()); }
         catch (NumberFormatException e) { Console.afficherErreur("ID invalide."); return; }
 
         Client client = store.trouverClient(clientId);
-        if (client == null) { Console.afficherErreur("Client introuvable."); return; }
+        if (client == null) { Console.afficherErreur("Compagnie introuvable."); return; }
 
         int id = store.prochainIdVente();
         Vente vente = new Vente(id, client, utilisateurConnecte.getIdentifiant());
 
-        // Ajout des produits
         boolean continuer = true;
         while (continuer) {
-            Console.demanderSaisie("ID produit (0 pour terminer)");
+            Console.demanderSaisie("ID équipement (0 pour terminer)");
             int produitId;
             try { produitId = Integer.parseInt(scanner.nextLine().trim()); }
             catch (NumberFormatException e) { Console.afficherErreur("ID invalide."); continue; }
@@ -47,7 +44,7 @@ public class VenteService {
             if (produitId == 0) { continuer = false; continue; }
 
             Produit p = store.trouverProduit(produitId);
-            if (p == null) { Console.afficherErreur("Produit introuvable."); continue; }
+            if (p == null) { Console.afficherErreur("Équipement introuvable."); continue; }
 
             Console.demanderSaisie("Quantité");
             int qte;
@@ -65,27 +62,37 @@ public class VenteService {
         }
 
         if (vente.getLignes().isEmpty()) {
-            Console.afficherInfo("Vente annulée — aucun produit.");
+            Console.afficherInfo("Vente annulée — aucun équipement.");
             return;
         }
 
-        // Confirmation
         afficherRecu(vente);
         Console.demanderSaisie("Confirmer la vente ? (O/N)");
         String rep = scanner.nextLine().trim();
 
         if (rep.equalsIgnoreCase("O")) {
             store.ajouterVente(vente);
+            
+            for (LigneVente lv : vente.getLignes()) {
+                MouvementStock m = new MouvementStock(
+                    store.prochainIdMouvement(), lv.getProduit().getId(), lv.getQuantite(),
+                    MouvementStock.TypeMouvement.SORTIE, MouvementStock.MotifMouvement.VENTE,
+                    utilisateurConnecte.getIdentifiant()
+                );
+                store.ajouterMouvement(m);
+            }
+            
             store.sauvegarderProduits();
 
-            // Mise à jour chiffre d'affaires du vendeur
             if (utilisateurConnecte instanceof Vendeur) {
                 ((Vendeur) utilisateurConnecte).ajouterVente(vente.getTotalTTC());
             }
 
             Console.afficherSucces("Vente #" + id + " enregistrée avec succès !");
+            
+            genererFacture(vente);
+            
         } else {
-            // Remettre les stocks
             for (LigneVente lv : vente.getLignes()) {
                 lv.getProduit().setQuantiteStock(
                     lv.getProduit().getQuantiteStock() + lv.getQuantite()
@@ -95,7 +102,7 @@ public class VenteService {
         }
     }
 
-    // ── Annuler une vente ────────────────────────────────────────
+    /** Annuler une vente. */
     public void annulerVente() {
         Console.afficherTitre("Annuler une vente");
         Console.demanderSaisie("ID de la vente à annuler");
@@ -113,11 +120,17 @@ public class VenteService {
 
         vente.annuler();
 
-        // Restituer le stock
         for (LigneVente lv : vente.getLignes()) {
             lv.getProduit().setQuantiteStock(
                 lv.getProduit().getQuantiteStock() + lv.getQuantite()
             );
+            
+            MouvementStock m = new MouvementStock(
+                store.prochainIdMouvement(), lv.getProduit().getId(), lv.getQuantite(),
+                MouvementStock.TypeMouvement.ENTREE, MouvementStock.MotifMouvement.ANNULATION_VENTE,
+                utilisateurConnecte.getIdentifiant()
+            );
+            store.ajouterMouvement(m);
         }
 
         store.sauvegarderVentes();
@@ -125,7 +138,7 @@ public class VenteService {
         Console.afficherSucces("Vente #" + id + " annulée. Stocks restaurés.");
     }
 
-    // ── Afficher reçu ASCII ──────────────────────────────────────
+    /** Afficher reçu ASCII. */
     public void afficherRecu(Vente v) {
         System.out.println();
         System.out.println(Console.CYAN + "╔══════════════════════════════════════════╗");
@@ -136,7 +149,7 @@ public class VenteService {
             "Vente #" + v.getId() + " — " + v.getDateFormatee());
         System.out.printf(Console.CYAN + "║" + Console.RESET
             + " %-40s " + Console.CYAN + "║%n" + Console.RESET,
-            "Client : " + v.getClient().getNom());
+            "Compagnie : " + v.getClient().getNomCompagnie());
         System.out.printf(Console.CYAN + "║" + Console.RESET
             + " %-40s " + Console.CYAN + "║%n" + Console.RESET,
             "Vendeur : " + v.getVendeurId());
@@ -160,5 +173,49 @@ public class VenteService {
             "TOTAL TTC :", v.getTotalTTC());
         System.out.println(Console.CYAN + "╚══════════════════════════════════════════╝" + Console.RESET);
         System.out.println();
+    }
+    
+    /** Générer Facture. */
+    private void genererFacture(Vente v) {
+        java.io.File dossier = new java.io.File("rapports");
+        if (!dossier.exists()) dossier.mkdirs();
+        
+        String nomFichier = "rapports/facture_" + v.getId() + ".txt";
+        
+        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(nomFichier))) {
+            pw.println("==================================================");
+            pw.println("              FACTURE DE VENTE                    ");
+            pw.println("==================================================");
+            pw.println("Facture N°   : " + v.getId());
+            pw.println("Date         : " + v.getDateFormatee());
+            pw.println("Vendeur      : " + v.getVendeurId());
+            pw.println("--------------------------------------------------");
+            pw.println("CLIENT");
+            pw.println("Nom          : " + v.getClient().getNomCompagnie());
+            pw.println("Contact      : " + v.getClient().getContactPrincipal());
+            pw.println("Adresse      : " + v.getClient().getAdresse());
+            pw.println("==================================================");
+            pw.println(String.format("%-25s %-5s %15s", "Article", "Qte", "Montant HT"));
+            pw.println("--------------------------------------------------");
+            
+            for (LigneVente lv : v.getLignes()) {
+                String nomP = lv.getProduit().getNom();
+                if (nomP.length() > 24) nomP = nomP.substring(0, 21) + "...";
+                pw.println(String.format("%-25s x%-4d %15.2f F", 
+                    nomP, lv.getQuantite(), lv.getSousTotal()));
+            }
+            
+            pw.println("--------------------------------------------------");
+            pw.println(String.format("%-31s %15.2f F", "Sous-total HT :", v.getSousTotal()));
+            pw.println(String.format("%-31s %15.2f F", "TVA (19%) :", v.getMontantTVA()));
+            pw.println("==================================================");
+            pw.println(String.format("%-31s %15.2f F", "TOTAL TTC :", v.getTotalTTC()));
+            pw.println("==================================================");
+            pw.println("Merci pour votre confiance.");
+            
+            Console.afficherSucces("Facture générée : " + nomFichier);
+        } catch (java.io.IOException e) {
+            Console.afficherErreur("Erreur génération facture : " + e.getMessage());
+        }
     }
 }

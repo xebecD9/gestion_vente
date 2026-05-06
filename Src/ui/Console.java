@@ -1,12 +1,20 @@
 package Src.ui;
 
-/**
- * ╔══════════════════════════════════════════════╗
- *  Console  —  Utilitaires d'affichage ANSI
- *  Système de Gestion des Ventes · D.I.K.W
- * ╚══════════════════════════════════════════════╝
- */
+
 public class Console {
+
+    public static void nettoyerEcran() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < 50; i++) System.out.println(); 
+        }
+    }
 
     // ── Réinitialisation ─────────────────────────────────────────
     public static final String RESET  = "\033[0m";
@@ -19,14 +27,14 @@ public class Console {
     public static final String ESTOMPE     = "\033[2m";
 
     // ── Couleurs texte ────────────────────────────────────────────
-    public static final String ROUGE    = "\033[91m";   // rouge vif
-    public static final String VERT     = "\033[92m";   // vert vif
-    public static final String JAUNE    = "\033[93m";   // jaune vif
-    public static final String BLEU     = "\033[94m";   // bleu vif
-    public static final String MAGENTA  = "\033[95m";   // magenta vif
-    public static final String CYAN     = "\033[96m";   // cyan vif
-    public static final String BLANC    = "\033[97m";   // blanc pur
-    public static final String GRIS     = "\033[90m";   // gris sombre
+    public static final String ROUGE    = "\033[91m";   
+    public static final String VERT     = "\033[92m";  
+    public static final String JAUNE    = "\033[93m";   
+    public static final String BLEU     = "\033[94m";   
+    public static final String MAGENTA  = "\033[95m";   
+    public static final String CYAN     = "\033[96m";   
+    public static final String BLANC    = "\033[97m";   
+    public static final String GRIS     = "\033[90m";   
 
     // ── Couleurs sombres ──────────────────────────────────────────
     public static final String ROUGE_S   = "\033[31m";
@@ -55,11 +63,11 @@ public class Console {
         String sous  = GRIS + ITALIQUE;
 
         System.out.println();
-        System.out.println(bord + "  ╔══════════════════════                      ════════════════════════╗" + RESET);
-        System.out.println(bord + "  ║" + texte + "             SYSTÈME DE GESTION DES VENTES " + bord + "║" + RESET);
-        System.out.println(bord + "  ║" + sous  + "                        D . I . K . W      " + bord + "║" + RESET);
-        System.out.println(bord + "  ║" + GRIS  + "         votre satisfaction,notre priorite " + bord + "║" + RESET);
-        System.out.println(bord + "  ╚══════════════════════                      ════════════════════════╝" + RESET);
+        System.out.println(bord + "  ╔══════════════════════════════════════════════╗" + RESET);
+        System.out.println(bord + "  ║" + texte + "             AERO SPACE MANAGEMENT SYSTEM  "         + bord + "║" + RESET);
+        System.out.println(bord + "  ║" + sous  + "                        D . I . K . W      "             + bord + "║" + RESET);
+        System.out.println(bord + "  ║" + GRIS  + "         votre satisfaction,notre priorite "         + bord + "║" + RESET);
+        System.out.println(bord + "  ╚══════════════════════════════════════════════╝" + RESET);
         System.out.println();
     }
 

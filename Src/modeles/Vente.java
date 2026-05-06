@@ -43,8 +43,21 @@ public class Vente {
     public LocalDateTime  getDate()     { return dateVente; }
     public boolean        isAnnulee()   { return annulee; }
     public void           annuler()     { this.annulee = true; }
+    
+    public void setDate(LocalDateTime date) { this.dateVente = date; }
+    public void setAnnulee(boolean annulee) { this.annulee = annulee; }
 
     public String getDateFormatee() {
         return dateVente.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+    
+    public String serialiserLignes() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < lignes.size(); i++) {
+            LigneVente lv = lignes.get(i);
+            sb.append(lv.getProduit().getId()).append(":").append(lv.getQuantite());
+            if (i < lignes.size() - 1) sb.append(",");
+        }
+        return sb.toString();
     }
 }

@@ -26,14 +26,15 @@ public class MenuVendeur {
     public void afficher() {
         boolean actif = true;
         while (actif) {
+            Console.nettoyerEcran();
             Console.afficherTitre("Menu Vendeur — " + utilisateur.getNom());
 
             Console.afficherOption(1, "Créer une vente");
             Console.afficherOption(2, "Annuler une vente");
-            Console.afficherOption(3, "Voir les produits");
-            Console.afficherOption(4, "Rechercher un produit");
-            Console.afficherOption(5, "Voir les clients");
-            Console.afficherOption(6, "Rechercher un client");
+            Console.afficherOption(3, "Voir les équipements");
+            Console.afficherOption(4, "Rechercher un équipement");
+            Console.afficherOption(5, "Voir les compagnies clientes");
+            Console.afficherOption(6, "Rechercher une compagnie");
             Console.afficherOption(0, "Se déconnecter");
             System.out.println();
 

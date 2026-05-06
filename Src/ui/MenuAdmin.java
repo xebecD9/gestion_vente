@@ -42,11 +42,12 @@ public class MenuAdmin {
         boolean actif = true;
 
         while (actif) {
+            Console.nettoyerEcran();
             Console.afficherTitre("Menu Administrateur — " + utilisateur.getNom());
 
             Console.afficherSousTitre("Gestion");
-            Console.afficherOption(1, "📦", "Gestion des produits");
-            Console.afficherOption(2, "👥", "Gestion des clients");
+            Console.afficherOption(1, "📦", "Gestion des équipements");
+            Console.afficherOption(2, "🏢", "Gestion des compagnies clientes");
             Console.afficherOption(3, "🛒", "Gestion des vendeurs");
             Console.afficherOption(4, "🧾", "Gestion des ventes");
 
@@ -87,17 +88,18 @@ public class MenuAdmin {
         boolean actif = true;
 
         while (actif) {
-            Console.afficherTitre("Gestion des produits");
+            Console.afficherTitre("Gestion des équipements");
 
             Console.afficherSousTitre("CRUD");
-            Console.afficherOption(1, "➕", "Ajouter un produit");
-            Console.afficherOption(2, "✏️ ", "Modifier un produit");
-            Console.afficherOption(3, "🗑️ ", "Supprimer un produit");
+            Console.afficherOption(1, "➕", "Ajouter un équipement");
+            Console.afficherOption(2, "✏️ ", "Modifier un équipement");
+            Console.afficherOption(3, "🗑️ ", "Supprimer un équipement");
 
             Console.afficherSousTitre("Consultation");
-            Console.afficherOption(4, "📋", "Afficher tous les produits");
-            Console.afficherOption(5, "🔍", "Rechercher un produit");
+            Console.afficherOption(4, "📋", "Afficher tous les équipements");
+            Console.afficherOption(5, "🔍", "Rechercher un équipement");
             Console.afficherOption(6, "⚠️ ", "Alertes stock bas");
+            Console.afficherOption(7, "📜", "Historique des mouvements de stock");
 
             System.out.println();
             Console.separateur();
@@ -115,10 +117,11 @@ public class MenuAdmin {
                 case "4": produitService.afficherTousProduits(); break;
                 case "5": produitService.rechercherProduit();    break;
                 case "6": produitService.afficherAlertesStock(); break;
+                case "7": produitService.afficherMouvements();   break;
                 case "0": actif = false;                         break;
                 default:
                     Console.afficherErreur("Choix invalide : « " + choix + " »");
-                    Console.afficherAide("Saisissez un numéro entre 0 et 6.");
+                    Console.afficherAide("Saisissez un numéro entre 0 et 7.");
             }
         }
     }
@@ -177,16 +180,16 @@ public class MenuAdmin {
         boolean actif = true;
 
         while (actif) {
-            Console.afficherTitre("Gestion des clients");
+            Console.afficherTitre("Gestion des compagnies clientes");
 
             Console.afficherSousTitre("CRUD");
-            Console.afficherOption(1, "➕", "Ajouter un client");
-            Console.afficherOption(2, "✏️ ", "Modifier un client");
-            Console.afficherOption(3, "🗑️ ", "Supprimer un client");
+            Console.afficherOption(1, "➕", "Ajouter une compagnie");
+            Console.afficherOption(2, "✏️ ", "Modifier une compagnie");
+            Console.afficherOption(3, "🗑️ ", "Supprimer une compagnie");
 
             Console.afficherSousTitre("Consultation");
-            Console.afficherOption(4, "📋", "Afficher tous les clients");
-            Console.afficherOption(5, "🔍", "Rechercher un client");
+            Console.afficherOption(4, "📋", "Afficher toutes les compagnies");
+            Console.afficherOption(5, "🔍", "Rechercher une compagnie");
             Console.afficherOption(6, "📜", "Historique des achats");
 
             System.out.println();

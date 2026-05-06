@@ -11,6 +11,7 @@ public class UtilisateurService {
         this.authService = authService;
         this.scanner = scanner;
     }
+    /** Lister les vendeurs. */
     public void listerVendeurs() {
        Console.afficherTitre("Liste des vendeurs");
        boolean trouve = false;
@@ -24,6 +25,7 @@ public class UtilisateurService {
            Console.afficherInfo("Aucun vendeur trouvé.");
        }
     }
+    /** Rechercher un vendeur. */
     public void rechercherVendeur() {
         Console.afficherTitre("Rechercher un vendeur");
         Console.demanderSaisie("Nom ou identifiant du vendeur");
@@ -40,6 +42,7 @@ public class UtilisateurService {
             Console.afficherInfo("Aucun vendeur trouvé pour le critère : " + critere);
         }
     } 
+    /** Ajouter un vendeur. */
     public void ajouterVendeur() {
         Console.afficherTitre("Ajouter un vendeur");
 
@@ -57,10 +60,11 @@ public class UtilisateurService {
         authService.ajouterUtilisateur(v);
         Console.afficherSucces("Vendeur ajouté avec l'ID : " + id);
     }
+    /** Modifier un vendeur. */
     public void modifierVendeur(){
         Console.afficherTitre("Modifier un vendeur");
         listerVendeurs();
-        //demande l'id
+        
         Console.demanderSaisie("ID du vendeur a modifier");
         int id; 
         try{
@@ -88,7 +92,7 @@ public class UtilisateurService {
         if(!motDePasse.isEmpty()) u.setMotDePasse(motDePasse);
 
     } 
-    //supprimer un vendeur
+    /** Supprimer un vendeur. */
     public void supprimerVendeur(){
         Console.afficherTitre("Supprimer un vendeur");
         listerVendeurs();
@@ -111,6 +115,7 @@ public class UtilisateurService {
         authService.supprimerUtilisateur(u);
         Console.afficherSucces("Vendeur supprimé.");    
     }  
+    /** Reinitialiser le mot de passe. */
     public void reinitialisermotdepasse(){
         Console.afficherTitre("Reinitialiser le mot de passe");
         listerVendeurs();

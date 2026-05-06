@@ -1,6 +1,0 @@
-# id|nom|telephone|email|adresse
-1|Fotso Kaje|699123456|fotso@gmail.com|pitoare
-2|Eyenga claire|677654321|Eyenga@gmail.com|Missingleo
-3|Paul Mbarga|655789012|paul@email.com|Maroua Nord
-4|Essame|694707378|jose@gmail.com|domayo
-5||||
