@@ -36,18 +36,22 @@ public class ProduitService {
 
         Console.demanderSaisie("Prix");
         double prix = 0;
-        try { prix = Double.parseDouble(scanner.nextLine().trim()); }
-        catch (NumberFormatException e) { Console.afficherErreur("Prix invalide."); return; }
+        try { prix = Double.parseDouble(scanner.nextLine().trim());
+         if (prix <= 0) {
+        Console.afficherErreur("Le prix doit être supérieur à 0."); return;} 
+        } catch (NumberFormatException e) { Console.afficherErreur("Prix invalide."); return; }
 
         Console.demanderSaisie("Quantité initiale en stock");
         int quantite = 0;
-        try { quantite = Integer.parseInt(scanner.nextLine().trim()); }
-        catch (NumberFormatException e) { Console.afficherErreur("Quantité invalide."); return; }
+        try { quantite = Integer.parseInt(scanner.nextLine().trim());
+        if (quantite < 0) { Console.afficherErreur("Le stock ne peut pas être négatif."); return; } } catch (NumberFormatException e) { Console.afficherErreur("Quantité invalide."); return; }
         
         Console.demanderSaisie("Seuil d'alerte de stock bas");
         int seuil = 0;
-        try { seuil = Integer.parseInt(scanner.nextLine().trim()); }
-        catch (NumberFormatException e) { Console.afficherErreur("Seuil invalide."); return; }
+        try { seuil = Integer.parseInt(scanner.nextLine().trim());
+        if (seuil < 0) {
+        Console.afficherErreur("Le seuil ne peut pas être négatif.");
+        return; } } catch (NumberFormatException e) { Console.afficherErreur("Seuil invalide."); return; }
 
         int id = store.prochainIdProduit();
         Produit p = new Produit(id, nom, referenceFabricant, categorie, certification, prix, quantite, seuil);
