@@ -1,0 +1,6 @@
+# Fichier des compagnies clientes
+# Format : id;nomCompagnie;contactPrincipal;email;adresse
+1;ArianeGroup;+1 55779034;ariane@gamil.com;new york
+2;Boieng co;+33 067503333;boieng@gmail.com;leyde pays-bas
+3;AVIC;7483920202;hjdsdkkdwlwwd;pekin
+4;STELIA Aerospace;839e00e0de;hehdejkfee;Rochefort

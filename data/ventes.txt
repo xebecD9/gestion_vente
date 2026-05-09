@@ -1,0 +1,4 @@
+# Historique des ventes aérospatiales
+# Format : id;clientId;vendeurId;date;total;annulee;lignes(prodId:qte,...)
+1;1;vendeur3;08/05/2026 11:03;6.426E7;false;3:12
+2;2;admin;08/05/2026 11:05;3.57E7;false;2:20

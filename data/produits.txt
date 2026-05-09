@@ -1,8 +1,8 @@
 # Fichier des équipements aérospatiaux
 # Format : id;nom;referenceFabricant;categorie;certification;prix;quantiteStock;seuilAlerte
 1;Systeme de gestion de vol;Garmin(010-02507-00);Avionique;FAA TSO-C115,EASA;1850000.0;20;5
-2;Altimetre 4 FGH;Winter Instruments;instruments;EASA part 21;1500000.0;35;10
-3;Transpondeur ADS-B;Garmin GTX345;Avionique;EASA;4500000.0;50;23
+2;Altimetre 4 FGH;Winter Instruments;instruments;EASA part 21;1500000.0;15;10
+3;Transpondeur ADS-B;Garmin GTX345;Avionique;EASA;4500000.0;38;23
 4;Casque pilote;Bose A20;Equipement;TSO-C139;800000.0;150;50
 5;Actionneur d'ascenceur;Boeing;controle vol;EASA;6.0E7;200;10
 6;TransceiverS-Band;EnduroSatTransceiver;communication;Space qualified;1.1E7;123;56
